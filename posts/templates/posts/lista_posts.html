@@ -1,12 +1,14 @@
-{% extends "posts/base.html" %}
+{% extends "project/base.html" %}
 {% load static %}
 
-{% block title %}{{ page_title }} | Mi Blog{% endblock %}
+{% block title %}Posts | Mi Blog{% endblock %}
 
 {% block content %}
   <div class="detail-header">
     <h2>{{ page_title }}</h2>
-    <a class="button" href="{% url 'crear_post' %}">+ Crear post</a>
+    {% if user.is_authenticated %}
+      <a class="button" href="{% url 'crear_post' %}">+ Crear post</a>
+    {% endif %}
   </div>
 
   <section class="post-list">
@@ -19,7 +21,7 @@
                  alt="Imagen de {{ post.titulo }}" />
           {% else %}
             <img class="post-image post-image-default"
-                 src="{% static 'posts/img/default.png' %}"
+                 src="{% static 'posts/img/default-post.png' %}"
                  alt="Imagen por defecto de {{ post.titulo }}" />
           {% endif %}
         </a>
@@ -29,17 +31,30 @@
             <a class="post-title-link" href="{% url 'detalle_post' post.slug %}">{{ post.titulo }}</a>
           </h3>
 
-          <p class="post-meta">
-            Escrito por {{ post.autor }}
-            el {{ post.fecha_creacion|date:"d/m/Y H:i" }}
-          </p>
+          <div class="post-author">
+            {% if post.autor.perfil.avatar %}
+              <img src="{{ post.autor.perfil.avatar.url }}"
+                   alt="Avatar de {{ post.autor.username }}"
+                   class="avatar-post-small">
+            {% else %}
+              <img src="{% static 'accounts/img/default-user.png' %}"
+                   alt="Avatar por defecto"
+                   class="avatar-post-small">
+            {% endif %}
+            <p class="post-meta">
+              <strong>{{ post.autor.username }}</strong>
+              <span>{{ post.fecha_creacion|date:"d/m/Y · H:i" }}</span>
+            </p>
+          </div>
           <p class="post-content">{{ post.contenido|truncatewords:40 }}</p>
           <div class="actions">
             <a class="button" href="{% url 'detalle_post' post.slug %}">Ver detalle</a>
-            <a class="button button-secondary"
-               href="{% url 'editar_post' post.slug %}">Editar</a>
-            <a class="button button-danger"
-               href="{% url 'eliminar_post' post.slug %}">Eliminar</a>
+            {% if user == post.autor %}
+              <a class="button button-secondary"
+                 href="{% url 'editar_post' post.slug %}">Editar</a>
+              <a class="button button-danger"
+                 href="{% url 'eliminar_post' post.slug %}">Eliminar</a>
+            {% endif %}
           </div>
         </div>
       </article>

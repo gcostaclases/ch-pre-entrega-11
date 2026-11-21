@@ -1,0 +1,30 @@
+{% extends "project/base.html" %}
+
+{% block title %}Crear cuenta | Mi Blog{% endblock %}
+
+{% block content %}
+  <section class="auth-layout">
+    <div class="auth-copy">
+      <span class="eyebrow">Sumate al blog</span>
+      <h1>Creá tu cuenta</h1>
+      <p>Registrate para escribir posts y completar tu perfil con una foto y una breve presentación.</p>
+    </div>
+    <div class="form-card auth-card">
+      {% if form.errors %}
+        <div class="form-alert">
+          <strong>Revisá los datos ingresados:</strong>
+          {{ form.errors }}
+        </div>
+      {% endif %}
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Registrarme</button>
+      </form>
+      <p class="auth-footer">
+        ¿Ya tenés cuenta?
+        <a href="{% url 'login' %}">Iniciar sesión</a>
+      </p>
+    </div>
+  </section>
+{% endblock %}

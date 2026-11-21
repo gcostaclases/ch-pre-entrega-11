@@ -1,0 +1,66 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Mi Blog{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'project/css/style.css' %}">
+  </head>
+  <body>
+    <header class="site-header">
+      <a href="{% url 'inicio' %}" class="brand">
+        <img src="{% static 'project/img/logo-glups.png' %}"
+             alt="Logo del blog"
+             class="logo">
+        {% comment %} <span>Mi Blog</span> {% endcomment %}
+      </a>
+
+      <nav class="site-nav">
+        <a class="nav-link" href="{% url 'inicio' %}">Inicio</a>
+        <a class="nav-link" href="{% url 'lista_posts' %}">Posts</a>
+        <a href="{% url 'acerca' %}">Acerca de</a>
+        {% if user.is_authenticated %}
+          <details class="account-menu">
+            <summary>
+              {% if user.perfil.avatar %}
+                <img src="{{ user.perfil.avatar.url }}"
+                     alt="Avatar de {{ user.username }}"
+                     class="avatar-navbar">
+              {% else %}
+                <img src="{% static 'accounts/img/default-user.png' %}"
+                     alt="Avatar por defecto"
+                     class="avatar-navbar">
+              {% endif %}
+              <span>{{ user.username }}</span>
+            </summary>
+            <div class="account-dropdown">
+              <a href="{% url 'perfil' %}">Ver perfil</a>
+              <a href="{% url 'editar_perfil' %}">Editar perfil</a>
+              <a href="{% url 'password_change' %}">Cambiar contraseña</a>
+              <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="logout-button">Cerrar sesión</button>
+              </form>
+            </div>
+          </details>
+        {% else %}
+          <a class="nav-link nav-link-secondary" href="{% url 'login' %}">Iniciar sesión</a>
+          <a class="nav-link nav-link-primary" href="{% url 'registro' %}">Crear cuenta</a>
+        {% endif %}
+      </nav>
+    </header>
+
+    <main class="site-main">
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+      <p>Creado con Django</p>
+    </footer>
+
+    <script src="{% static 'project/js/main.js' %}"></script>
+  </body>
+</html>

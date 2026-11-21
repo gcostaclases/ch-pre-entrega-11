@@ -1,15 +1,18 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from .models import Post
 from .forms import PostForm
 
 # Create your views here.
-def inicio(request):
-    return render(request, "posts/inicio.html")
 
+# Sacamos las vistas de inicio y acerca del proyecto a un archivo views.py en la carpeta del proyecto, para que no estén mezcladas con las vistas de la app "posts" ya que son generales
 
-def acerca(request):
-    return render(request, "posts/acerca.html")
+# def inicio(request):
+#     return render(request, "posts/inicio.html")
+
+# def acerca(request):
+#     return render(request, "posts/acerca.html")
 
 
 # ---- READ POSTS ----
@@ -33,6 +36,7 @@ def detalle_post(request, slug):
 
 
 # ---- CREATE POST ----
+@login_required
 def crear_post(request):
     # Si el usuario envió el formulario
     if request.method == "POST":
@@ -40,12 +44,12 @@ def crear_post(request):
         # Creamos un formulario con los datos enviados por el usuario y los archivos subidos (si los hay)
         form = PostForm(request.POST, request.FILES)
 
-        # Le pedimos a Django que valide el formulario y si es válido, que nos devuelva los datos limpios
         if form.is_valid():
-            # Como estamos usando ModelForm, Django sabe cómo crear un objeto Post y guardarlo en la base de datos.
-            form.save()
-            # Redirige a la lista de posts después de crear uno nuevo
+            post = form.save(commit=False)
+            post.autor = request.user
+            post.save()
             return redirect("lista_posts")
+
     # Si no es un método POST, si es solo ver el formulario para crear un nuevo post
     else:
         form = PostForm()
@@ -59,8 +63,12 @@ def crear_post(request):
 
 
 # ---- UPDATE POST ----
+@login_required
 def editar_post(request, slug):
     post = get_object_or_404(Post, slug=slug)
+
+    if post.autor != request.user:
+        return HttpResponseForbidden("No tenés permiso para editar este post.")
 
     if request.method == "POST":
         form = PostForm(request.POST, request.FILES, instance=post)
@@ -81,8 +89,12 @@ def editar_post(request, slug):
 
 
 # ---- DELETE POST ----
+@login_required
 def eliminar_post(request, slug):
     post = get_object_or_404(Post, slug=slug)
+
+    if post.autor != request.user:
+        return HttpResponseForbidden("No tenés permiso para eliminar este post.")
 
     if request.method == "POST":
         post.delete()

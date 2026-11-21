@@ -2,6 +2,9 @@ from django.contrib import admin
 from .models import Post
 
 # Register your models here.
+admin.site.site_header = "Administración de Mi Blog"
+admin.site.site_title = "Panel del Blog"
+admin.site.index_title = "Gestión de contenidos"
 
 @admin.register(Post)
 # Esta clase permite mostrar columnas útiles en la lista del admin

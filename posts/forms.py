@@ -6,14 +6,14 @@ class PostForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         image_widget = self.fields["imagen"].widget
-        image_widget.initial_text = "Imagen actual"
+        image_widget.initial_text = "URL"
         image_widget.input_text = "Cambiar imagen"
         image_widget.clear_checkbox_label = "Eliminar imagen"
 
     # La clase Meta le indica a Django qué modelo debe usar y qué campos deben aparecer en el formulario
     class Meta:
         model = Post
-        fields = ["titulo", "contenido", "autor", "estado", "imagen"]
+        fields = ["titulo", "contenido", "estado", "imagen"]
 
     labels = {
         "titulo": "Título del post",

@@ -1,4 +1,4 @@
-{% extends "posts/base.html" %}
+{% extends "project/base.html" %}
 {% load static %}
 
 {% block title %}{{ page_title }} | Mi Blog{% endblock %}
@@ -23,12 +23,6 @@
       </div>
 
       <div>
-        {{ form.autor.label_tag }}
-        {{ form.autor }}
-        {{ form.autor.errors }}
-      </div>
-
-      <div>
         {{ form.estado.label_tag }}
         {{ form.estado }}
         {{ form.estado.errors }}
@@ -38,7 +32,8 @@
         {% if post and post.imagen %}
           <div class="image-preview">
             <p>Imagen actual:</p>
-            <img class="form-image"
+            <img id="post-image-preview"
+                 class="form-image"
                  src="{{ post.imagen.url }}"
                  alt="Imagen actual de {{ post.titulo }}" />
           </div>

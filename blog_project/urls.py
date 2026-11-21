@@ -20,10 +20,27 @@ from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
 
+# Importamos las vistas generales del proyecto
+from . import views as project_views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # Añado la ruta para las urls de la app posts
-    path('', include('posts.urls')),
+    
+    # Añadimos la ruta para la vista de inicio del proyecto
+    path('', project_views.inicio, name='inicio'),
+
+    # Añadimos la ruta para la vista de acerca del proyecto
+    path(
+        'acerca/',
+        project_views.acerca,
+        name='acerca',
+    ),
+
+    # Añadimos la ruta para las URLs de la app "posts"
+    path('posts/', include('posts.urls')),
+    
+    # Añadimos la ruta para las URLs de la app "accounts"
+    path("accounts/", include("accounts.urls")),
 ]
 
 if settings.DEBUG:

@@ -1,0 +1,47 @@
+{% extends "project/base.html" %}
+{% load static %}
+
+{% block title %}Editar perfil | Mi Blog{% endblock %}
+
+{% block content %}
+  <section class="form-card profile-edit-card">
+    <span class="eyebrow">Datos personales</span>
+    <h1>Editar perfil</h1>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.biografia.errors }}
+      <div class="form-field">
+        {{ form.biografia.label_tag }}
+        {{ form.biografia }}
+      </div>
+
+      {{ form.link_web.errors }}
+      <div class="form-field">
+        {{ form.link_web.label_tag }}
+        {{ form.link_web }}
+      </div>
+
+      {{ form.avatar.errors }}
+      <div class="image-field profile-avatar-field">
+        {% if perfil.avatar %}
+          <div class="image-preview">
+            <p>Avatar actual:</p>
+            <img id="avatar-preview"
+                 class="form-image avatar-edit-preview"
+                 src="{{ perfil.avatar.url }}"
+                 alt="Avatar actual de {{ user.username }}">
+          </div>
+        {% endif %}
+
+        <div class="image-controls">
+          {{ form.avatar }}
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="submit">{{ texto_boton }}</button>
+        <a class="button button-secondary" href="{% url 'perfil' %}">Cancelar</a>
+      </div>
+    </form>
+  </section>
+{% endblock %}

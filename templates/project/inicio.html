@@ -1,0 +1,25 @@
+{% extends "project/base.html" %}
+
+{% block title %}Inicio | Mi Blog{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    {% if user.is_authenticated %}
+      <span class="eyebrow">Tu espacio de ideas</span>
+      <h1>Hola, {{ user.username }}</h1>
+      <p>Compartí una historia, una explicación o un proyecto con la comunidad.</p>
+      <div class="actions">
+        <a class="button" href="{% url 'lista_posts' %}">Explorar posts</a>
+        <a class="button button-secondary" href="{% url 'crear_post' %}">Crear un post</a>
+      </div>
+    {% else %}
+      <span class="eyebrow">Ideas, historias y proyectos</span>
+      <h1>Bienvenido a Mi Blog</h1>
+      <p>Leé las publicaciones recientes o creá tu cuenta para comenzar a escribir.</p>
+      <div class="actions">
+        <a class="button" href="{% url 'lista_posts' %}">Explorar posts</a>
+        <a class="button button-secondary" href="{% url 'registro' %}">Crear una cuenta</a>
+      </div>
+    {% endif %}
+  </section>
+{% endblock %}

@@ -19,6 +19,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
+# Login
+LOGIN_URL = "login"
+LOGIN_REDIRECT_URL = "lista_posts"
+LOGOUT_REDIRECT_URL = "lista_posts"
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
@@ -44,6 +49,7 @@ INSTALLED_APPS = [
 
     # Aplicaciones propias
     'posts.apps.PostsConfig',
+    'accounts.apps.AccountsConfig',
 ]
 
 MIDDLEWARE = [
@@ -61,7 +67,9 @@ ROOT_URLCONF = 'blog_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        # 'DIRS': [],
+        # Agregado para que Django busque los templates generales en la carpeta "templates" del proyecto
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -122,6 +130,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
 STATIC_URL = 'static/'
+# Agregado para que Django busque los archivos estáticos en la carpeta "static" del proyecto
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
 
 
 # Email

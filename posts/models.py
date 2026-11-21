@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from django.utils.text import slugify
 
 # Create your models here.
@@ -11,7 +12,8 @@ class Post(models.Model):
 
     titulo = models.CharField(max_length=200)
     contenido = models.TextField()
-    autor = models.CharField(max_length=100)
+    autor = models.ForeignKey(settings.AUTH_USER_MODEL,
+                              on_delete=models.CASCADE)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     estado = models.CharField(
         max_length=20, choices=ESTADOS, default="borrador")

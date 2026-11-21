@@ -1,0 +1,52 @@
+{% extends "project/base.html" %}
+
+{% block title %}Acerca de | Mi Blog{% endblock %}
+
+{% block content %}
+  <section class="about-page">
+    <div class="about-hero">
+      <span class="eyebrow">Conocé el proyecto</span>
+      <h1>Acerca de Mi Blog</h1>
+      <p>
+        Un espacio pensado para compartir ideas, proyectos y experiencias,
+        construido para que cualquier usuario pueda leer y publicar contenido.
+      </p>
+    </div>
+
+    <div class="about-grid">
+      <article class="about-card">
+        <span class="about-card-icon" aria-hidden="true">01</span>
+        <h2>Sobre el proyecto</h2>
+        <p>
+          Mi Blog nació como un proyecto para aprender desarrollo web con Django
+          y poner en práctica la publicación de contenido en una interfaz clara.
+        </p>
+      </article>
+
+      <article class="about-card">
+        <span class="about-card-icon" aria-hidden="true">02</span>
+        <h2>Nuestro propósito</h2>
+        <p>
+          Crear un lugar sencillo para publicar conocimientos útiles, expresar
+          ideas y construir conversaciones alrededor de cada post.
+        </p>
+      </article>
+
+      <article class="about-card">
+        <span class="about-card-icon" aria-hidden="true">03</span>
+        <h2>Cómo participar</h2>
+        <p>
+          Registrate, completá tu perfil y empezá a compartir tus propias
+          publicaciones con la comunidad del blog.
+        </p>
+      </article>
+    </div>
+
+    <div class="about-actions">
+      <a class="button" href="{% url 'lista_posts' %}">Explorar posts</a>
+      {% if not user.is_authenticated %}
+        <a class="button button-secondary" href="{% url 'registro' %}">Crear una cuenta</a>
+      {% endif %}
+    </div>
+  </section>
+{% endblock %}

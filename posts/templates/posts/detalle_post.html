@@ -1,4 +1,4 @@
-{% extends "posts/base.html" %}
+{% extends "project/base.html" %}
 {% load static %}
 
 {% block title %}{{ post.titulo }} | Mi Blog{% endblock %}
@@ -9,9 +9,22 @@
       <h2>{{ post.titulo }}</h2>
       <span class="status">{{ post.get_estado_display }}</span>
     </div>
-    <p class="post-meta"><strong>Autor:</strong> {{ post.autor }} · <strong>Fecha:</strong> {{ post.fecha_creacion }}</p>
-    <hr />
-    <p class="post-content">{{ post.contenido }}</p>
+    <div class="post-author post-author-detail">
+      {% if post.autor.perfil.avatar %}
+        <img src="{{ post.autor.perfil.avatar.url }}"
+             alt="Avatar de {{ post.autor.username }}"
+             class="avatar-post" />
+      {% else %}
+        <img src="{% static 'accounts/img/default-user.png' %}"
+             alt="Avatar por defecto"
+             class="avatar-post" />
+      {% endif %}
+      <div>
+        <span class="post-author-label">Publicado por</span>
+        <strong>{{ post.autor.username }}</strong>
+        <time datetime="{{ post.fecha_creacion|date:'c' }}">{{ post.fecha_creacion|date:"d/m/Y · H:i" }}</time>
+      </div>
+    </div>
 
     <figure class="post-detail-image">
       {% if post.imagen %}
@@ -20,17 +33,20 @@
              alt="Imagen de {{ post.titulo }}" />
       {% else %}
         <img class="post-image post-image-default"
-             src="{% static 'posts/img/default.png' %}"
+             src="{% static 'posts/img/default-post.png' %}"
              alt="Imagen por defecto de {{ post.titulo }}" />
       {% endif %}
     </figure>
+    <div class="post-detail-content">{{ post.contenido|linebreaks }}</div>
   </article>
 
   <div class="actions">
     <a class="button button-secondary" href="{% url 'lista_posts' %}">Volver al listado</a>
-    <a class="button" href="{% url 'editar_post' post.slug %}">Editar</a>
-    <a class="button button-danger"
-       href="{% url 'eliminar_post' post.slug %}">Eliminar</a>
+    {% if user == post.autor %}
+      <a class="button" href="{% url 'editar_post' post.slug %}">Editar</a>
+      <a class="button button-danger"
+         href="{% url 'eliminar_post' post.slug %}">Eliminar</a>
+    {% endif %}
   </div>
 
 {% endblock %}
